@@ -58,7 +58,7 @@ export default function ContactForm() {
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-[clamp(2rem,6vw,4rem)] font-normal mb-4 border-b border-[rgba(177,177,177,0.3)] inline-block pb-2">
-            <span className="first-letter:opacity-50">Let's work</span>
+            <span className="first-letter:opacity-50">Let&apos;s work</span>
           </h2>
         </div>
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -95,7 +95,7 @@ export default function ContactForm() {
   {submitStatus === "success" && (
     <Alert className="bg-green-900/20 border-green-500/50 text-green-400">
       <CheckCircle className="h-4 w-4" />
-      <AlertDescription>Message sent successfully! I'll get back to you within 24 hours.</AlertDescription>
+      <AlertDescription>Message sent successfully! I&apos;ll get back to you within 24 hours.</AlertDescription>
     </Alert>
   )}
 
@@ -103,7 +103,7 @@ export default function ContactForm() {
     <Alert className="bg-red-900/20 border-red-500/50 text-red-400">
       <AlertCircle className="h-4 w-4" />
       <AlertDescription>
-        Failed to send message. Please try again or contact me directly at alhapopy@gmail.com
+        Failed to send message. Please try again or contact me directly at ...
       </AlertDescription>
     </Alert>
   )}

@@ -1,5 +1,5 @@
 import CardGrid from "@/components/hero/card-grid";
-import ContactForm from "@/components/hero/contact-form";
+// import ContactForm from "@/components/hero/contact-form";
 import { Card } from "@/types";
 
 export default function Home() {
@@ -7,14 +7,14 @@ export default function Home() {
     {
       id: 1,
       date: "02/18/2074",
-      title: "Code CR-4519: Anomaly Detection in Array",
+      title: "Code CR-4519: Painfx therapy",
       link: "#",
       image: "/images/img1.jpg"
     },
     {
       id: 2,
       date: "02/20/2074",
-      title: "Case Log 3X-782: Malfunction Analysis of Drone Units",
+      title: "Case Log 3X-782: Safar ",
       link: "#",
       image: "/images/img2.jpg"
     },
@@ -32,9 +32,8 @@ export default function Home() {
       <div className="container mx-auto px-4 py-8">
       <div className="frame py-8">
         <h1 className="text-xl font-normal">
-          Starlog Entry: Design distortion inspired by <span className="text-[rgb(124,20,244,0.9)] hover:text-[rgb(94,54,176,0.75)]">Mulverse Network</span>
+        The dimension number : 5975158 <span className="text-[rgb(124,20,244,0.9)] hover:text-[rgb(94,54,176,0.75)]">Mulverse Network</span>
         </h1>
-        <span className="text-[rgb(124,20,244,0.9)] hover:text-[rgb(94,54,176,0.75)]">Initiate visual matrix</span>
       </div>
 
 
@@ -48,7 +47,7 @@ export default function Home() {
         </p>
 
         <CardGrid cards={cards} />
-        <ContactForm />
+        {/* <ContactForm /> */}
         
         <div className="frame py-8 text-center">
           <h2 className="text-xl font-medium text-purple-300">☄️ Incoming Transmission</h2>
