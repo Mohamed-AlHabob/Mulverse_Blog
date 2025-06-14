@@ -9,7 +9,14 @@ type CardGridProps = {
   cards: CardType[];
 };
 
-const settingsArray = [
+const settingsArray: {
+  orientation: "vertical" | "horizontal";
+  slicesTotal: number;
+  animation?: {
+    duration: number;
+    ease: string;
+  };
+}[] = [
   { 
     orientation: 'vertical', 
     slicesTotal: 5 

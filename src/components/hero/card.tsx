@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useRef, useEffect } from "react"
+import { useRef, useEffect, useCallback } from "react"
 import type { Card as CardType } from "@/types"
 import { gsap } from "gsap"
 import { lettersAndSymbols } from "@/lib/utils"
@@ -11,7 +11,7 @@ type CardProps = {
   card: CardType
   settings: {
     orientation: "vertical" | "horizontal"
-    slicesTotal: number
+    slicesTotal: number 
     animation?: {
       duration: number
       ease: string
@@ -29,15 +29,35 @@ export default function Card({ card, settings, isMiddleColumn }: CardProps) {
   const linkRef = useRef<HTMLAnchorElement>(null)
   const slicesRef = useRef<HTMLDivElement[]>([])
 
-  // Split text for animation
   useEffect(() => {
     if (dateRef.current && titleRef.current && linkRef.current) {
-      // Split text into spans for animation
       splitText(dateRef.current)
       splitText(titleRef.current)
       splitText(linkRef.current)
     }
   }, [])
+
+  // Set clip paths for slices
+  const setClipPaths = useCallback(() => {
+    slicesRef.current.forEach((slice, position) => {
+      const a1 = (position * 100) / settings.slicesTotal
+      const b1 = (position * 100) / settings.slicesTotal + 100 / settings.slicesTotal
+
+      const clipPath =
+        settings.orientation === "vertical"
+          ? `polygon(${a1}% 0%, ${b1}% 0%, ${b1}% 100%, ${a1}% 100%)`
+          : `polygon(0% ${a1}%, 100% ${a1}%, 100% ${b1}%, 0% ${b1}%)`
+
+      gsap.set(slice, { clipPath })
+
+      // Offset to solve gap issues
+      if (settings.orientation === "vertical") {
+        gsap.set(slice, { left: position * -1 })
+      } else {
+        gsap.set(slice, { top: position * -1 })
+      }
+    })
+  }, [settings.orientation, settings.slicesTotal])
 
   // Create slices for the image
   useEffect(() => {
@@ -62,32 +82,9 @@ export default function Card({ card, settings, isMiddleColumn }: CardProps) {
         imgRef.current.style.setProperty("--rows", settings.slicesTotal.toString())
       }
 
-      // Set clip paths
       setClipPaths()
     }
-  }, [card.image, settings.orientation, settings.slicesTotal])
-
-  // Set clip paths for slices
-  const setClipPaths = () => {
-    slicesRef.current.forEach((slice, position) => {
-      const a1 = (position * 100) / settings.slicesTotal
-      const b1 = (position * 100) / settings.slicesTotal + 100 / settings.slicesTotal
-
-      const clipPath =
-        settings.orientation === "vertical"
-          ? `polygon(${a1}% 0%, ${b1}% 0%, ${b1}% 100%, ${a1}% 100%)`
-          : `polygon(0% ${a1}%, 100% ${a1}%, 100% ${b1}%, 0% ${b1}%)`
-
-      gsap.set(slice, { clipPath })
-
-      // Offset to solve gap issues
-      if (settings.orientation === "vertical") {
-        gsap.set(slice, { left: position * -1 })
-      } else {
-        gsap.set(slice, { top: position * -1 })
-      }
-    })
-  }
+  }, [card.image, settings.orientation, settings.slicesTotal, setClipPaths])
 
   // Handle mouse enter
   const handleMouseEnter = () => {
@@ -142,7 +139,6 @@ export default function Card({ card, settings, isMiddleColumn }: CardProps) {
       )
   }
 
-  // Handle mouse leave
   const handleMouseLeave = () => {
     const isVertical = settings.orientation === "vertical"
 
@@ -187,34 +183,34 @@ export default function Card({ card, settings, isMiddleColumn }: CardProps) {
     element.innerHTML = chars.map((char) => `<span class="char" data-initial="${char}">${char}</span>`).join("")
   }
 
-  // Shuffle characters animation
-  const shuffleChars = (element: HTMLElement | null) => {
-    if (!element) return
+// Shuffle characters animation
+const shuffleChars = (element: HTMLElement | null) => {
+  if (!element) return
 
-    const chars = element.querySelectorAll(".char")
+  const chars = element.querySelectorAll(".char")
 
-    chars.forEach((char, position) => {
-      gsap.killTweensOf(char)
-      gsap.fromTo(
-        char,
-        { opacity: 0 },
-        {
-          duration: 0.03,
-          innerHTML: () => lettersAndSymbols[Math.floor(Math.random() * lettersAndSymbols.length)],
-          repeat: 3,
-          repeatRefresh: true,
-          opacity: 1,
-          repeatDelay: 0.05,
-          onComplete: () => {
-            gsap.set(char, {
-              innerHTML: (char as HTMLElement).dataset.initial,
-              delay: 0.03,
-            })
-          },
+  chars.forEach((char) => {
+    gsap.killTweensOf(char)
+    gsap.fromTo(
+      char,
+      { opacity: 0 },
+      {
+        duration: 0.03,
+        innerHTML: () => lettersAndSymbols[Math.floor(Math.random() * lettersAndSymbols.length)],
+        repeat: 3,
+        repeatRefresh: true,
+        opacity: 1,
+        repeatDelay: 0.05,
+        onComplete: () => {
+          gsap.set(char, {
+            innerHTML: (char as HTMLElement).dataset.initial,
+            delay: 0.03,
+          })
         },
-      )
-    })
-  }
+      },
+    )
+  })
+}
 
   return (
     <article
